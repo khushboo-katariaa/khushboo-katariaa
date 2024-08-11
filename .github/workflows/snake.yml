@@ -1,8 +1,8 @@
 name: Generate snake animation
 
 on:
-  schedule: # Execute every 12 hours
-    - cron: "* */12 * * *"
+  schedule:
+    - cron: "0 */12 * * *" # Run every 12 hours
   workflow_dispatch:
   push:
     branches:
@@ -22,10 +22,18 @@ jobs:
           github_user_name: ${{ github.repository_owner }}
           outputs: snake.svg
 
-      - name: Push snake.svg to the main branch
-        uses: crazy-max/ghaction-github-pages@v2.6.0
+      - name: Upload snake.svg
+        uses: actions/upload-artifact@v3
         with:
-          target_branch: main
-          build_dir: .
+          name: snake-svg
+          path: snake.svg
+
+      - name: Commit and push snake.svg to the main branch
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          message: 'Add snake.svg'
+          add: 'snake.svg'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
