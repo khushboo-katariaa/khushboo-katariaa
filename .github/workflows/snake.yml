@@ -2,11 +2,11 @@ name: Generate snake animation
 
 on:
   schedule:
-    - cron: "0 */12 * * *" # Run every 12 hours
-  workflow_dispatch:
+    - cron: "0 */12 * * *" # Runs every 12 hours
+  workflow_dispatch: # Allows manual triggering
   push:
     branches:
-      - main
+      - main # Runs on push to main branch
 
 jobs:
   generate:
@@ -21,12 +21,6 @@ jobs:
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: snake.svg
-
-      - name: Upload snake.svg
-        uses: actions/upload-artifact@v3
-        with:
-          name: snake-svg
-          path: snake.svg
 
       - name: Commit and push snake.svg to the main branch
         uses: EndBug/add-and-commit@v9
